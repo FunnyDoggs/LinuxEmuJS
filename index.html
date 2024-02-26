@@ -29,6 +29,17 @@
             caret-color: white;
             width: 100%;
         }
+
+        .input,
+        .output {
+            white-space: pre-wrap;
+            margin-bottom: 5px;
+        }
+
+        .input::before {
+            content: '$ ';
+            color: limegreen;
+        }
     </style>
     <title>Linux Emulator</title>
 </head>
@@ -175,7 +186,7 @@
             function displayInput(command) {
                 const inputElement = document.createElement('div');
                 inputElement.className = 'input';
-                inputElement.textContent = '$ ' + command;
+                inputElement.textContent = command;
                 terminal.appendChild(inputElement);
             }
 
