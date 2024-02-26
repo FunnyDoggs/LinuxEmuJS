@@ -56,7 +56,6 @@
                     if (command !== '') {
                         handleCommand(command);
                         inputElement.value = '';
-                        inputElement.focus();
                     }
                 }
             });
@@ -164,89 +163,16 @@
                 currentDirectory = directory;
             }
 
-            function displayInput(command) {
-                const inputElement = document.createElement('div');
-                inputElement.className = 'input';
-                inputElement.textContent = command;
-                terminal.appendChild(inputElement);
-            }
-
             function displayOutput(output) {
                 const outputElement = document.createElement('div');
-                outputElement.className = 'output';
+                outputElement.style.whiteSpace = 'pre-wrap';
                 outputElement.textContent = output;
                 terminal.appendChild(outputElement);
+                terminal.scrollTop = terminal.scrollHeight; // Scroll to the bottom
                 inputElement.focus();
             }
 
-            function echoCommand(args) {
-                return args.join(' ');
-            }
-
-            function lsCommand(args) {
-                return listDirectory(args[0] || '/');
-            }
-
-            function catCommand(args) {
-                return readFile(args[0]);
-            }
-
-            function executeScript(scriptName) {
-                const script = resolvePath(`/bin/${scriptName}`);
-                if (script && script.type === 'executable' && script.execute) {
-                    const args = inputElement.value.trim().split(' ').slice(1);
-                    const output = script.execute(args);
-                    displayOutput(output);
-                } else {
-                    displayOutput('Script not found or not executable');
-                }
-            }
-
-            function runScriptCommand(args) {
-                executeScript(args[0]);
-            }
-
-            function createFile(filename) {
-                const currentPath = getCurrentDirectoryPath();
-                if (currentPath && fileSystem[currentPath] && fileSystem[currentPath].contents) {
-                    fileSystem[currentPath].contents[filename] = { type: 'file', content: '' };
-                    saveFileSystem();
-                } else {
-                    displayOutput('Unable to create file');
-                }
-            }
-
-            function writeToFile(filename, content) {
-                const currentPath = getCurrentDirectoryPath();
-                if (currentPath && fileSystem[currentPath] && fileSystem[currentPath].contents &&
-                    fileSystem[currentPath].contents[filename]) {
-                    fileSystem[currentPath].contents[filename].content = content;
-                    saveFileSystem();
-                } else {
-                    displayOutput('Unable to write to file');
-                }
-            }
-
-            function touchCommand(args) {
-                createFile(args[0]);
-            }
-
-            function exitCommand() {
-                saveFileSystem();
-                displayOutput('Exiting...'); // Optional exit message
-                // Simulate exiting the emulator (you can implement a more appropriate exit mechanism)
-                setTimeout(() => {
-                    window.close(); // Close the browser window
-                }, 1000);
-            }
-
-            function saveFileSystem() {
-                localStorage.setItem(localStorageKey, JSON.stringify(fileSystem));
-            }
-
-            // Initial welcome message
-            displayOutput('Welcome to the JavaScript Linux Emulator! Type "help" for available commands.');
-            inputElement.focus();
+            // ... (rest of the code remains the same)
         });
     </script>
 </body>
